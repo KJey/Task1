@@ -14,24 +14,35 @@ namespace MethodsTask_1
         {
 
 
-            DirectoryInfo DefaultPath = new DirectoryInfo(@"D:\\12");
-
-            Console.WriteLine("Folder "+DefaultPath.FullName.ToString()+" contains:");
-
-            FileSystemVisitor FSV = new FileSystemVisitor(DefaultPath);
-
-            //var exit = FSV.ShowAllInside(DefaultPath); //ToString();
-            //Console.WriteLine(exit);
-            
-            foreach (var fileinfo in FSV.ShowFileSystemInfo())
+            try
             {
+
+                DirectoryInfo DefaultPath = new DirectoryInfo(@"D:\\12");
+                FileSystemVisitor FSV     = new FileSystemVisitor(DefaultPath);
+
+
+                Console.WriteLine("Folder " + DefaultPath.FullName.ToString() + " contains:");
+
                 
-                Console.WriteLine(fileinfo.FullName);
+                foreach (var fileinfo in FSV.ShowFileSystemInfo())
+                {
+
+                    Console.WriteLine(fileinfo.FullName);
+                }
+
             }
 
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception.Message.ToString());
+            }
 
-            Console.WriteLine("Press any key to exit");
-            Console.ReadKey();
-        }
+            finally
+            {
+                Console.WriteLine("Press any key to exit");
+                Console.ReadKey();
+            }
+
+    }
     }
 }
