@@ -10,3 +10,10 @@ C:\Users\Nikolay_Nikolskiy\Downloads\MethodsTask_1\MethodsTask_1\obj\Debug\Metho
 C:\Users\Nikolay_Nikolskiy\Downloads\MethodsTask_1\MethodsTask_1\bin\Debug\MethodsTask_1.exe
 C:\Users\Nikolay_Nikolskiy\Downloads\MethodsTask_1\MethodsTask_1\bin\Debug\MethodsTask_1.pdb
 C:\Users\Nikolay_Nikolskiy\Downloads\MethodsTask_1\MethodsTask_1\obj\Debug\MethodsTask_1.csprojResolveAssemblyReference.cache
+C:\Users\KJey\Downloads\github\Task1\MethodsTask_1\bin\Debug\MethodsTask_1.exe.config
+C:\Users\KJey\Downloads\github\Task1\MethodsTask_1\bin\Debug\MethodsTask_1.exe
+C:\Users\KJey\Downloads\github\Task1\MethodsTask_1\bin\Debug\MethodsTask_1.pdb
+C:\Users\KJey\Downloads\github\Task1\MethodsTask_1\obj\Debug\MethodsTask_1.csprojResolveAssemblyReference.cache
+C:\Users\KJey\Downloads\github\Task1\MethodsTask_1\obj\Debug\MethodsTask_1.csproj.CoreCompileInputs.cache
+C:\Users\KJey\Downloads\github\Task1\MethodsTask_1\obj\Debug\MethodsTask_1.exe
+C:\Users\KJey\Downloads\github\Task1\MethodsTask_1\obj\Debug\MethodsTask_1.pdb

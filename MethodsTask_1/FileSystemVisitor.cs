@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
+using System.Security.AccessControl;
 
 namespace MethodsTask_1
 {
@@ -47,45 +48,59 @@ namespace MethodsTask_1
 
          public IEnumerable<FileSystemInfo> ShowAllInside(DirectoryInfo dirInf)
          {
-             foreach (var FileSystemInfo in dirInf.EnumerateFileSystemInfos())
-             {
-                
 
-                if (FileSystemInfo is FileSystemInfo)
-
+                foreach (var FileSystemInfo in dirInf.EnumerateFileSystemInfos())
                 {
 
-                    yield return FileSystemInfo;
-                    
 
+                    if (FileSystemInfo is FileSystemInfo)
+                    {
+                        yield return FileSystemInfo;
+                    }
+
+
+
+
+                    if (FileSystemInfo is DirectoryInfo)
+                    {
+                        DirectoryInfo dir = new DirectoryInfo(FileSystemInfo.FullName);
+                        FileAttributes attr = (new FileInfo(dir.FullName)).Attributes;
+                    var rules = dir.GetAccessControl();
+                    if ((attr & FileAttributes.Hidden) > 0)
+                            continue;
+                        if ((attr & FileAttributes.ReadOnly) > 0)
+                            Console.WriteLine("This file is read-only.");
+                    //if (rules.AreAccessRulesProtected)
+                      //  break;//Console.WriteLine("This file is protected.");
+                    //if ((attr & FileAttributes.) > 0)
+                    //   Console.WriteLine("This file is read-only.");
+                    //var rules = di.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
+
+                    else
+                    {
+                        foreach (var InsideFolderInfo in ShowAllInside(dir))
+                        {
+                            //DirectoryInfo dir1 = new DirectoryInfo(InsideFolderInfo.FullName);
+                            yield return InsideFolderInfo;
+                            //ShowAllInside(dir1);
+                        }
+                        continue;
+                        //yield return FileSystemInfo;
+                    }
+                    }
+                    continue;
                 }
-
-
-                
-
-                if (FileSystemInfo is DirectoryInfo)
-                 {
-                     
-                     DirectoryInfo dir = new DirectoryInfo(FileSystemInfo.FullName.ToString());
-
-                    foreach (var InsideFolderInfo in ShowAllInside(dir))
-                     {
-                         yield return InsideFolderInfo;
-                     }
-                     continue;
-                 }
+            
                  
-                 
-             }
+             
          }
 
-        private void OnEvent<TArgs>(EventHandler<TArgs> someEvent, TArgs args)
+                private void OnEvent<TArgs>(EventHandler<TArgs> someEvent, TArgs args)
 
-        {
+                {
+                    someEvent?.Invoke(this, args);
 
-            someEvent?.Invoke(this, args);
-
-        }
+                }
     }
 }
 

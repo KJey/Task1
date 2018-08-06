@@ -17,7 +17,7 @@ namespace MethodsTask_1
             try
             {
 
-                DirectoryInfo DefaultPath = new DirectoryInfo(@"D:\\12");
+                DirectoryInfo DefaultPath = new DirectoryInfo(@"C:\Users\KJey\Desktop");//(@"D:\\12");
                 FileSystemVisitor FSV     = new FileSystemVisitor(DefaultPath);
 
 
@@ -29,20 +29,22 @@ namespace MethodsTask_1
 
                     Console.WriteLine(fileinfo.FullName);
                 }
+                Console.WriteLine("Operation successfully ended");
 
             }
 
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message.ToString());
+                Console.WriteLine("Canceled");
             }
 
             finally
             {
-                Console.WriteLine("Press any key to exit");
-                Console.ReadKey();
+                Console.WriteLine("Search ended");
+                //Console.ReadKey();
             }
 
-    }
+        }
     }
 }
