@@ -7,14 +7,15 @@ using System.IO;
 using MethodsTask_1.EventArgs;
 namespace MethodsTask_1
 {
-    interface IFileSystemProcessingStrategy
+    public interface IFileSystemProcessingStrategy
     {
                 ActionType ProcessItemFinded<TItemInfo>(
                 TItemInfo itemInfo,
                 Func<FileSystemInfo, bool> filter,
                 EventHandler<FileFindedEventArgs<TItemInfo>> itemFinded,
                 EventHandler<FileFindedEventArgs<TItemInfo>> filteredItemFinded,
-                Action<EventHandler<FileFindedEventArgs<TItemInfo>>, FileFindedEventArgs<TItemInfo>> eventEmitter)
+                Action<EventHandler<FileFindedEventArgs<TItemInfo>>, 
+                FileFindedEventArgs<TItemInfo>> eventEmitter)
                 where TItemInfo : FileSystemInfo;
     }
 }

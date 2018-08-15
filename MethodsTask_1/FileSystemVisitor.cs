@@ -8,7 +8,7 @@ using MethodsTask_1.EventArgs;
 
 namespace MethodsTask_1
 {
-    class FileSystemVisitor
+    public class FileSystemVisitor
     {
         //Parameters:
         private readonly DirectoryInfo DefaultPath;
@@ -24,71 +24,87 @@ namespace MethodsTask_1
         public event EventHandler<FileFindedEventArgs<DirectoryInfo>> FilteredDirectoryFinded;
 
         //Constructors:
-        public FileSystemVisitor(DirectoryInfo startDirectory) => DefaultPath = startDirectory;
+        public FileSystemVisitor(DirectoryInfo startDirectory)
+        {
+            DefaultPath = startDirectory;
+        }
         public FileSystemVisitor(DirectoryInfo startDirectory, IFileSystemProcessingStrategy fileSPS, Func<FileSystemInfo, bool> default_filter = null)
         {
-            DefaultPath                  = startDirectory;
-            filter                       = default_filter;
+            DefaultPath = startDirectory;
+            filter = default_filter;
+            fileSystemProcessingStrategy = fileSPS;
+        }
+        public FileSystemVisitor(string startDirectory, IFileSystemProcessingStrategy fileSPS, Func<FileSystemInfo, bool> default_filter = null)
+        {
+            DirectoryInfo DefPath = new DirectoryInfo(startDirectory);
+            DefaultPath = DefPath;
+            filter = default_filter;
             fileSystemProcessingStrategy = fileSPS;
         }
 
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<FileSystemInfo> ShowFileSystemInfo()
-         {
+        {
             OnEvent(Start, new StartEventArgs());
-             foreach(var FileSystemInfo in ShowAllInside(DefaultPath))
-             {
+            foreach (var FileSystemInfo in ShowAllInside(DefaultPath, CurrentAction.ContinueSearch))
+            {
                 yield return FileSystemInfo;
-               
-             }
+            }
             OnEvent(Finish, new FinishEventArgs());
         }
 
+        public IEnumerable<FoundedFileInfo> ShowFoundedFiles()
+        {
+            OnEvent(Start, new StartEventArgs());
+            foreach (var FileSystemInfo in ShowAllInside(DefaultPath, CurrentAction.ContinueSearch))
+            {
+                FoundedFileInfo toReturn = new FoundedFileInfo(FileSystemInfo.FullName, FileSystemInfo.Name, null);
+                yield return toReturn;
+            }
+            OnEvent(Finish, new FinishEventArgs());
+        }
 
-         public IEnumerable<FileSystemInfo> ShowAllInside(DirectoryInfo dirInf)
+        //iterator:
+        private IEnumerable<FileSystemInfo> ShowAllInside(DirectoryInfo dirInf,CurrentAction curentAction)
          {
 
                 foreach (var FileSystemInfo in dirInf.EnumerateFileSystemInfos())
                 {
 
-
-                    if (FileSystemInfo is FileSystemInfo)
+                    //checking for file
+                    if (FileSystemInfo is FileInfo)
                     {
-                        yield return FileSystemInfo;
+                    FileInfo file = new FileInfo(FileSystemInfo.FullName);
+                    curentAction.Action = ProcessFile(file);
                     }
-
-
-
-
+                    //checking for folder
                     if (FileSystemInfo is DirectoryInfo)
                     {
                         DirectoryInfo dir = new DirectoryInfo(FileSystemInfo.FullName);
+                        curentAction.Action = ProcessDirectory(dir);
                         FileAttributes attr = (new FileInfo(dir.FullName)).Attributes;
                     var rules = dir.GetAccessControl();
-                    if ((attr & FileAttributes.Hidden) > 0)
+                        //checking for attributes
+                        if ((attr & FileAttributes.Hidden) > 0)
                             continue;
                         if ((attr & FileAttributes.ReadOnly) > 0)
                             Console.WriteLine("This file is read-only.");
-                    //if (rules.AreAccessRulesProtected)
-                      //  break;//Console.WriteLine("This file is protected.");
-                    //if ((attr & FileAttributes.) > 0)
-                    //   Console.WriteLine("This file is read-only.");
-                    //var rules = di.GetAccessRules(true, true, typeof(System.Security.Principal.SecurityIdentifier));
-
-                    else
-                    {
-                        foreach (var InsideFolderInfo in ShowAllInside(dir))
+                        if (curentAction.Action == ActionType.StopSearch)
+                            yield break;
+                        else
                         {
-                            //DirectoryInfo dir1 = new DirectoryInfo(InsideFolderInfo.FullName);
+                            foreach (var InsideFolderInfo in ShowAllInside(dir, curentAction))
+                            {
                             yield return InsideFolderInfo;
-                            //ShowAllInside(dir1);
-                        }
+                            }
                         continue;
-                        //yield return FileSystemInfo;
+                        }
                     }
-                    }
-                    continue;
+
                 }
             
                  

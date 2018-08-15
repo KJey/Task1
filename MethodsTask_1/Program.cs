@@ -17,17 +17,17 @@ namespace MethodsTask_1
             try
             {
 
-                DirectoryInfo DefaultPath = new DirectoryInfo(@"C:\Users\KJey\Desktop\WH ГОРОДА");//(@"D:\\12");
-                FileSystemVisitor FSV     = new FileSystemVisitor(DefaultPath, new FileSystemProcessingStrategy(), (info) => true);
+                DirectoryInfo DefaultPath = new DirectoryInfo(@"\\epkzkarw0553\.NET Mentroring");  //(@"D:\\12");
+                FileSystemVisitor FSV     = new FileSystemVisitor(DefaultPath, new FileSystemProcessingStrategy(), filter => false);
 
                 FSV.Start += (s, e) =>
                 {
-                    Console.WriteLine("Iteration started");
+                    Console.WriteLine("Operation successfully started");
                 };
 
                 FSV.Finish += (s, e) =>
                 {
-                    Console.WriteLine("Iteration finished");
+                    Console.WriteLine("Operation successfully finished");
                 };
 
                 FSV.FileFinded += (s, e) =>
@@ -52,8 +52,6 @@ namespace MethodsTask_1
                 FSV.FilteredDirectoryFinded += (s, e) =>
                 {
                     Console.WriteLine("Founded filtered directory: " + e.FindedItem.Name);
-                    if (e.FindedItem.Name.Length == 4)
-                        e.ActionType = ActionType.StopSearch;
                 };
 
 
@@ -65,7 +63,6 @@ namespace MethodsTask_1
 
                     Console.WriteLine(fileinfo.FullName);
                 }
-                Console.WriteLine("Operation successfully ended");
 
             }
 
