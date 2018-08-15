@@ -4,35 +4,35 @@ using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading.Tasks;
-using System.Security.AccessControl;
+using MethodsTask_1.EventArgs;
 
 namespace MethodsTask_1
 {
     class FileSystemVisitor
     {
-
+        //Parameters:
         private readonly DirectoryInfo DefaultPath;
+        private readonly Func<FileSystemInfo, bool> filter;
+        private readonly IFileSystemProcessingStrategy fileSystemProcessingStrategy;
 
-
+        //Events:
         public event EventHandler<StartEventArgs> Start;
-
         public event EventHandler<FinishEventArgs> Finish;
-
         public event EventHandler<FileFindedEventArgs<FileInfo>> FileFinded;
-
         public event EventHandler<FileFindedEventArgs<FileInfo>> FilteredFileFinded;
-
         public event EventHandler<FileFindedEventArgs<DirectoryInfo>> DirectoryFinded;
-
         public event EventHandler<FileFindedEventArgs<DirectoryInfo>> FilteredDirectoryFinded;
 
-        public FileSystemVisitor(DirectoryInfo startDirectory)
-
+        //Constructors:
+        public FileSystemVisitor(DirectoryInfo startDirectory) => DefaultPath = startDirectory;
+        public FileSystemVisitor(DirectoryInfo startDirectory, IFileSystemProcessingStrategy fileSPS, Func<FileSystemInfo, bool> default_filter = null)
         {
-
-            DefaultPath = startDirectory;
-
+            DefaultPath                  = startDirectory;
+            filter                       = default_filter;
+            fileSystemProcessingStrategy = fileSPS;
         }
+
+
 
         public IEnumerable<FileSystemInfo> ShowFileSystemInfo()
          {
@@ -95,12 +95,29 @@ namespace MethodsTask_1
              
          }
 
-                private void OnEvent<TArgs>(EventHandler<TArgs> someEvent, TArgs args)
+        private void OnEvent<TArgs>(EventHandler<TArgs> someEvent, TArgs args)
+        {
+            someEvent?.Invoke(this, args);
+        }
 
-                {
-                    someEvent?.Invoke(this, args);
+        private ActionType ProcessFile(FileInfo file)
+        {
+            return fileSystemProcessingStrategy
+                .ProcessItemFinded(file, filter, FileFinded, FilteredFileFinded, OnEvent);
+        }
 
-                }
+        private ActionType ProcessDirectory(DirectoryInfo directory)
+        {
+            return fileSystemProcessingStrategy
+                .ProcessItemFinded(directory, filter, DirectoryFinded, FilteredDirectoryFinded, OnEvent);
+        }
+
+        private class CurrentAction
+        {
+            public ActionType Action { get; set; }
+            public static CurrentAction ContinueSearch => new CurrentAction { Action = ActionType.ContinueSearch };
+        }
+
     }
 }
 

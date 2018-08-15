@@ -17,13 +17,49 @@ namespace MethodsTask_1
             try
             {
 
-                DirectoryInfo DefaultPath = new DirectoryInfo(@"C:\Users\KJey\Desktop");//(@"D:\\12");
-                FileSystemVisitor FSV     = new FileSystemVisitor(DefaultPath);
+                DirectoryInfo DefaultPath = new DirectoryInfo(@"C:\Users\KJey\Desktop\WH ГОРОДА");//(@"D:\\12");
+                FileSystemVisitor FSV     = new FileSystemVisitor(DefaultPath, new FileSystemProcessingStrategy(), (info) => true);
+
+                FSV.Start += (s, e) =>
+                {
+                    Console.WriteLine("Iteration started");
+                };
+
+                FSV.Finish += (s, e) =>
+                {
+                    Console.WriteLine("Iteration finished");
+                };
+
+                FSV.FileFinded += (s, e) =>
+                {
+                    Console.WriteLine("\tFounded file: " + e.FindedItem.Name);
+                };
+
+                FSV.DirectoryFinded += (s, e) =>
+                {
+                    Console.WriteLine("\tFounded directory: " + e.FindedItem.Name);
+                    if (e.FindedItem.Name.Length == 4)
+                    {
+                        e.ActionType = ActionType.StopSearch;
+                    }
+                };
+
+                FSV.FilteredFileFinded += (s, e) =>
+                {
+                    Console.WriteLine("Founded filtered file: " + e.FindedItem.Name);
+                };
+
+                FSV.FilteredDirectoryFinded += (s, e) =>
+                {
+                    Console.WriteLine("Founded filtered directory: " + e.FindedItem.Name);
+                    if (e.FindedItem.Name.Length == 4)
+                        e.ActionType = ActionType.StopSearch;
+                };
+
+
 
 
                 Console.WriteLine("Folder " + DefaultPath.FullName.ToString() + " contains:");
-
-                
                 foreach (var fileinfo in FSV.ShowFileSystemInfo())
                 {
 
@@ -33,18 +69,19 @@ namespace MethodsTask_1
 
             }
 
+            //catch (UnauthorizedAccessException exception)
+            //{
+            //    Console.WriteLine(exception.Message);
+            //    Console.WriteLine("Canceled");
+            //    return;                
+            //}
+
             catch (Exception exception)
             {
-                Console.WriteLine(exception.Message.ToString());
-                Console.WriteLine("Canceled");
+                Console.WriteLine(exception.Message);
+                Console.WriteLine("Search canceled");
+                return;
             }
-
-            finally
-            {
-                Console.WriteLine("Search ended");
-                //Console.ReadKey();
-            }
-
         }
     }
 }

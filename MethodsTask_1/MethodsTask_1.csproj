@@ -43,8 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Events.cs" />
+    <Compile Include="ActionType.cs" />
+    <Compile Include="EventArgs\ItemFindedEvent.cs" />
+    <Compile Include="EventArgs\FinishEvent.cs" />
+    <Compile Include="EventArgs\StartEvent.cs" />
+    <Compile Include="FileSystemProcessingStrategy.cs" />
     <Compile Include="FileSystemVisitor.cs" />
+    <Compile Include="IFileSystemProcessingStrategy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
