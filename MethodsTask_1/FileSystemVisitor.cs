@@ -42,11 +42,6 @@ namespace MethodsTask_1
             fileSystemProcessingStrategy = fileSPS;
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
         public IEnumerable<FileSystemInfo> ShowFileSystemInfo()
         {
             OnEvent(Start, new StartEventArgs());

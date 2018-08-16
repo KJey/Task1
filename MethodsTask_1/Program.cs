@@ -62,13 +62,6 @@ namespace MethodsTask_1
 
             }
 
-            //catch (UnauthorizedAccessException exception)
-            //{
-            //    Console.WriteLine(exception.Message);
-            //    Console.WriteLine("Canceled");
-            //    return;                
-            //}
-
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
