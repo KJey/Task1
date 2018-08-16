@@ -17,7 +17,7 @@ namespace MethodsTask_1
             try
             {
 
-                DirectoryInfo DefaultPath = new DirectoryInfo(@"\\epkzkarw0553\.NET Mentroring");  //(@"D:\\12");
+                DirectoryInfo DefaultPath = new DirectoryInfo(@"\\epkzkarw0553\.NET Mentroring");  //(@"D:\\12"); 
                 FileSystemVisitor FSV     = new FileSystemVisitor(DefaultPath, new FileSystemProcessingStrategy(), filter => false);
 
                 FSV.Start += (s, e) =>
@@ -38,10 +38,6 @@ namespace MethodsTask_1
                 FSV.DirectoryFinded += (s, e) =>
                 {
                     Console.WriteLine("\tFounded directory: " + e.FindedItem.Name);
-                    if (e.FindedItem.Name.Length == 4)
-                    {
-                        e.ActionType = ActionType.StopSearch;
-                    }
                 };
 
                 FSV.FilteredFileFinded += (s, e) =>
@@ -58,10 +54,10 @@ namespace MethodsTask_1
 
 
                 Console.WriteLine("Folder " + DefaultPath.FullName.ToString() + " contains:");
-                foreach (var fileinfo in FSV.ShowFileSystemInfo())
-                {
 
-                    Console.WriteLine(fileinfo.FullName);
+                foreach (FileSystemInfo fileinfo in FSV.ShowFileSystemInfo())
+                {
+                    Console.WriteLine(fileinfo);
                 }
 
             }

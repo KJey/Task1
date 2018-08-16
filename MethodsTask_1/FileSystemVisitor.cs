@@ -57,17 +57,6 @@ namespace MethodsTask_1
             OnEvent(Finish, new FinishEventArgs());
         }
 
-        public IEnumerable<FoundedFileInfo> ShowFoundedFiles()
-        {
-            OnEvent(Start, new StartEventArgs());
-            foreach (var FileSystemInfo in ShowAllInside(DefaultPath, CurrentAction.ContinueSearch))
-            {
-                FoundedFileInfo toReturn = new FoundedFileInfo(FileSystemInfo.FullName, FileSystemInfo.Name, null);
-                yield return toReturn;
-            }
-            OnEvent(Finish, new FinishEventArgs());
-        }
-
         //iterator:
         private IEnumerable<FileSystemInfo> ShowAllInside(DirectoryInfo dirInf,CurrentAction curentAction)
          {

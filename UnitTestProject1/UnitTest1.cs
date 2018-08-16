@@ -10,74 +10,135 @@ namespace UnitTestProject1
     [TestClass]
     public class UnitTests
     {
-        
-        FileSystemVisitor FSV = new FileSystemVisitor((@"D:\\12"), new FileSystemProcessingStrategy(), filter => false);
+
+        DirectoryInfo Path = new DirectoryInfo(@"D:\\12");
+
 
         [TestMethod]
         public void ShowFoundedFiles()
         {
-
-            FileSystemVisitor FSVin = new FileSystemVisitor((@"D:\\12"), new FileSystemProcessingStrategy(), filter => false);
-
-            List<string> result = new List<string>();
-
-            List<string> expectations = new List<string>();
-
-            expectations.Add("14");
-            expectations.Add("Mentoring.2017.Module.01 - master.zip");
-            expectations.Add("15");
-            expectations.Add("16");
-            expectations.Add("Mentoring.2017.Module.01 - master.zip");
-            expectations.Add("17");
-            expectations.Add("18");
-            expectations.Add("1A");
-            expectations.Add("Mentoring.2017.Module.01 - master.zip");
-            expectations.Add("Mentoring.2017.Module.01 - master.zip");
-            expectations.Add("Task.docx");
-            string vas = "";
             int i = 0;
-            foreach (var filesinfo in FSVin.ShowFoundedFiles())
+            List<string> result   = new List<string>();
+            FileSystemVisitor FSV = new FileSystemVisitor(Path, new FileSystemProcessingStrategy(), filter => false);
+            FSV.Start += (s, e) =>
             {
                 i++;
-                vas = filesinfo.Name;
-                result.Add(filesinfo.Name);
-            }
+            };
 
-            Assert.AreEqual(expectations, result);
-
-        }
-
-        [TestMethod]
-        public void ShowFoundedFiles_vs_ShowFileSystemInfo_Methods()
-        {
-            List<string> result_SFF = new List<string>();
-
-            List<string> result_FSI = new List<string>();
-
-            foreach (var fileinfo in FSV.ShowFoundedFiles())
+            FSV.Finish += (s, e) =>
             {
+                i++;
+            };
 
-                result_SFF.Add(fileinfo.FullName);
-            }
+            FSV.FileFinded += (s, e) =>
+            {
+                result.Add(e.FindedItem.Name);
+            };
+
+            FSV.DirectoryFinded += (s, e) =>
+            {
+                result.Add(e.FindedItem.Name);
+            };
+
+            FSV.FilteredFileFinded += (s, e) =>
+            {
+                result.Add(e.FindedItem.Name);
+            };
+
+            FSV.FilteredDirectoryFinded += (s, e) =>
+            {
+                result.Add(e.FindedItem.Name);
+            };
 
             foreach (var fileinfo in FSV.ShowFileSystemInfo())
             {
 
-                result_FSI.Add(fileinfo.FullName);
             }
-
-            Assert.AreEqual(result_SFF, result_FSI);
+            Assert.AreEqual(11, result.Count);
 
         }
 
+        [TestMethod]
+        public void StartEvent()
+        {
+            int i = 0;
+            FileSystemVisitor FSV = new FileSystemVisitor(Path, new FileSystemProcessingStrategy(), filter => false);
 
-        //[TestMethod]
-        //public void Test____()
-        //{
-        //    FileSystemVisitor FSVinside = FSV;
-        //    int delegatesCallCount = 0;
-        //    FSVinside.Start;
-        //}
+            FSV.Start += (s, e) =>
+            {
+                i++;
+            };
+
+            foreach (var fileinfo in FSV.ShowFileSystemInfo())
+            {
+
+            }
+
+            Assert.AreEqual(i, 1);
+
+        }
+
+        [TestMethod]
+        public void FinishEvent()
+        {
+            int i = 0;
+            FileSystemVisitor FSV = new FileSystemVisitor(Path, new FileSystemProcessingStrategy(), filter => false);
+
+            FSV.Finish += (s, e) =>
+            {
+                i++;
+            };
+
+            foreach (var fileinfo in FSV.ShowFileSystemInfo())
+            {
+
+            }
+            Assert.AreEqual(i, 1);
+
+        }
+
+        [TestMethod]
+        public void FileFindedEvent()
+        {
+            int i = 0;
+            bool check = false;
+            FileSystemVisitor FSV = new FileSystemVisitor(Path, new FileSystemProcessingStrategy(), filter => false);
+
+            FSV.FileFinded += (s, e) =>
+            {
+                i++;
+            };
+
+            foreach (var fileinfo in FSV.ShowFileSystemInfo())
+            {
+
+            }
+            if (i > 0) check = true;
+            Assert.IsTrue(check);
+
+        }
+
+        [TestMethod]
+        public void DirectoryFindedEvent()
+        {
+            int i = 0;
+            bool check = false;
+            FileSystemVisitor FSV = new FileSystemVisitor(Path, new FileSystemProcessingStrategy(), filter => false);
+
+            FSV.DirectoryFinded += (s, e) =>
+            {
+                i++;
+            };
+
+            foreach (var fileinfo in FSV.ShowFileSystemInfo())
+            {
+
+            }
+            if (i > 0) check = true;
+            Assert.IsTrue(check);
+
+        }
+
 
 
 

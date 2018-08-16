@@ -49,7 +49,6 @@
     <Compile Include="EventArgs\StartEvent.cs" />
     <Compile Include="FileSystemProcessingStrategy.cs" />
     <Compile Include="FileSystemVisitor.cs" />
-    <Compile Include="FoundedFileInfo.cs" />
     <Compile Include="IFileSystemProcessingStrategy.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
